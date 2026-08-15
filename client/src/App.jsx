@@ -1,15 +1,18 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
-
+import { Routes,Route } from 'react-router'
+import Navbar from './components/Navbar'
+import Sidebar from './components/Sidebar'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <h1 className='text-4xl font-[Space-Grotesk]'>POCKET LEDGER</h1>
+      <Navbar/>
+      <main>
+        <Sidebar/>
+      </main>
+      
     </>
   )
 }
