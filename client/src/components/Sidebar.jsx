@@ -34,7 +34,7 @@ const navigation = [
 ]
 function Sidebar(){
     return(
-        <aside className="w-75 min-h-screen bg-background text-text text-xl p-3 font-display">
+        <aside className="w-75 h-[calc(100vh-72px)] bg-background text-text text-xl p-3 font-display">
             
                 {
                 navigation.map(navs =>{
