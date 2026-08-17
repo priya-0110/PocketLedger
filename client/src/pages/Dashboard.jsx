@@ -1,19 +1,26 @@
+import {BanknoteArrowDown, BanknoteArrowUp, HandCoins, Wallet} from "lucide-react"
+import SummaryCard from "../components/SummaryCard";
+import SpendingOverview from "../components/SpendingOverview";
+import BudgetsOverview from "../components/BudgetsOverview";
 function Dashboard(){
     return(
-        <div className="flex justify-between">
-        <div>
-            <h1 className="text-4xl">Dashboard</h1>
-            
-        </div>
-            <div className="flex flex-col">
-                <label className="mb-1">Choose the Range</label>
-                <select name="Date Selector" className="bg-surface-muted py-1 px-3 border-2 rounded accent-primary-hover  focus:outline-none focus:border-primary-hover focus:ring-1 focus:ring-primary-hover">
-                <option value="This Week">This Week</option>
-                <option value="This Month">This Month</option>
-                <option value="Last Month">Last Month </option>
-                <option value="This Year">This Year</option>
-                <option value="Custom Range">Custom Range</option>
-            </select>
+        <div className="flex flex-col">
+            <div>
+                <h1 className="text-4xl">Dashboard</h1>            
+            </div> 
+            <div className="grid grid-cols-4 gap-5 mt-5">
+                <SummaryCard title="Total Balance" amount="₹25,400" icon={<Wallet/>}/>
+                 <SummaryCard title="Income" amount="₹45,000" icon={<BanknoteArrowUp/>}/>
+                  <SummaryCard title="Expenses" amount="₹19,600" icon={<BanknoteArrowDown/>}/>
+                   <SummaryCard title="Savings" amount="₹25,400" icon={<HandCoins/>}/>
+            </div>  
+            <div>
+                <div>
+                <SpendingOverview/>
+            </div>
+            <div>
+                <BudgetsOverview/>
+            </div>
             </div>
         </div>
     )
