@@ -3,11 +3,11 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 function Layout(){
     return(
-    <div>
+    <div className="min-h-screen flex flex-col">
       <Navbar/>
-      <div className="flex">
+      <div className="flex flex-1">
         <Sidebar/>
-        <main>
+        <main className="flex-1 bg-surface p-6 text-text font-display">
             <Outlet/>
         </main>
       </div>

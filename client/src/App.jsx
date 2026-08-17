@@ -2,8 +2,13 @@ import { useState } from 'react'
 import './App.css'
 import { Routes,Route } from 'react-router'
 import Layout from './components/Layout'
+import Dashboard from './pages/Dashboard'
+import Transactions from './pages/Transactions'
+import Budgets from './pages/Budgets'
+import Accounts from './pages/Accounts'
+import Reports from './pages/Reports'
+import Settings from './pages/Settings'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
@@ -11,36 +16,36 @@ function App() {
         <Route element = {<Layout/>}>
                 <Route
                     path="/dashboard"
-                    element={<h1>Dashboard</h1>}
+                    element={<Dashboard/>}
                 />
                  <Route
                     path="/"
-                    element={<h1>Dashboard</h1>}
+                    element={<Dashboard/>}
                 />
 
                 <Route
                     path="/transactions"
-                    element={<h1>Transactions</h1>}
+                    element={<Transactions/>}
                 />
 
                 <Route
                     path="/budgets"
-                    element={<h1>Budgets</h1>}
+                    element={<Budgets/>}
                 />
 
                 <Route
                     path="/reports"
-                    element={<h1>Reports</h1>}
+                    element={<Reports/>}
                 />
                                 <Route
                     path="/accounts"
-                    element={<h1>Accounts</h1>}
+                    element={<Accounts/>}
                 />
 
                 
                 <Route
                     path="/settings"
-                    element={<h1>Settings</h1>}
+                    element={<Settings/>}
                 />
         </Route>
 
