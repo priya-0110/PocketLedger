@@ -9,7 +9,7 @@ function Navbar(){
                 <span className="text-lg font-semibold text-primary">Pocket<span className="text-text">Ledger</span></span>
             </div>
            
-            <div className="text-text font-display flex gap-3 p-3">
+            <div className="text-text  flex gap-3 p-3">
                 <Bell  />
                 <Search />
                 <NavLink to="/login"><UserRound /></NavLink>
