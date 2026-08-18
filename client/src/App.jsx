@@ -8,6 +8,7 @@ import Budgets from './pages/Budgets'
 import Accounts from './pages/Accounts'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
+import Login from './pages/Login'
 function App() {
 
   return (
@@ -48,6 +49,7 @@ function App() {
                     element={<Settings/>}
                 />
         </Route>
+        <Route path='/login' element={<Login/>}/>
 
       </Routes>
       

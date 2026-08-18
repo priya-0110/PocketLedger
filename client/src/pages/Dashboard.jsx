@@ -14,7 +14,7 @@ function Dashboard(){
                   <SummaryCard title="Expenses" amount="₹19,600" icon={<BanknoteArrowDown/>}/>
                    <SummaryCard title="Savings" amount="₹25,400" icon={<HandCoins/>}/>
             </div>  
-            <div>
+            <div className="grid grid-cols-2 gap-5">
                 <div>
                 <SpendingOverview/>
             </div>
