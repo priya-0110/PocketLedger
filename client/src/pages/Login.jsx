@@ -3,7 +3,12 @@ import { Eye,EyeOff } from "lucide-react";
 import { Link } from "react-router";
 function Login(){    
     const[showPaswword,setShowPassword] = useState(false);
-    const handleSubmit = (e)=>{e.preventDefault()}
+    const [email,setEmail] = useState("")
+    const [password,setPassword] = useState("");
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+                
+    }
     return(
         <div className="min-h-screen bg-background flex items-center font-display justify-center px-4">
              <div className="w-full max-w-md bg-primary-hover rounded-2xl p-8">
