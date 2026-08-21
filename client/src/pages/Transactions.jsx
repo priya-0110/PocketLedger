@@ -145,30 +145,3 @@ export default Transactions;
 
 
 
-// {
-//                     transactions.map((transaction,index)=>{
-//                         const formattedDate = formatDate(transaction.date)
-//                         return(
-                        
-//                         <div key = {index} className="border-l-2 border-primary ml-4 pl-6">
-//                             <p className="text-3xl font-semibold">{formattedDate}</p>
-//                             <div className="relative mb-8">
-                                
-//                                <div className="absolute -left-8.25 top-2 h-4 w-4 rounded-full border-4 border-background bg-primary"></div>
-//                                 <div className="bg-primary-hover rounded-xl p-4 mt-3 w-full max-w-md">
-//                                     <div className="">
-//                                         <h1 className="text-xl font-semibold">{transaction.title}</h1>
-//                                         <h2 className="text-lg font-semibold text-text-muted">{transaction.category} • {transaction.description}</h2>
-//                                     </div>
-                                                                       
-//                                         <h1 className="font-semibold text-text">
-//                                             {transaction.type==="income" ? "+ " : "- "}
-//                                             {transaction.amount}</h1>
-                                    
-//                                 </div>
-//                             </div>
-                            
-//                         </div>
-
-//                     )})
-//                 }
