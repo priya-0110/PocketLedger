@@ -37,7 +37,7 @@ const findingPercentage = (budget, spent) => {
 
 function BudgetsOverview() {
     return (
-        <div className="bg-primary-hover mt-5 rounded-2xl p-5">
+        <div className="bg-background mt-5 rounded-2xl p-5">
 
             {/* Header */}
             <div className="flex items-center justify-between">

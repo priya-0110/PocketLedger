@@ -1,7 +1,7 @@
 function SummaryCard({title,amount,icon}){
     return(
         
-        <div className="flex items-center gap-4 rounded-xl bg-primary-hover p-5">
+        <div className="flex items-center gap-4 rounded-xl bg-background p-5">
             <div className="flex items-center justify-center rounded-lg bg-accent/20 text-accent">
                 <div className="">{icon}</div>
             </div>
