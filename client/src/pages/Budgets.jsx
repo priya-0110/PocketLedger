@@ -64,7 +64,7 @@ function Budgets(){
                     budgets.map(budget=>{
                         const percent = percentage(budget.budget,budget.spent);
                         return(
-                            <div key={budget.category} className=" grid bg-black/40 max-w-sm rounded-2xl  mt-7 p-2 px-3">
+                            <div key={budget.category} className=" grid bg-background max-w-sm rounded-2xl  mt-7 p-2 px-3">
                                 <p className="text-3xl max-w-sm text-center">{budget.category}</p>
                                 <div className="mt-2 h-2 w-full max-w-sm 
                                 overflow-hidden rounded-full bg-text">

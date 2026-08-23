@@ -11,7 +11,7 @@ function Login(){
     }
     return(
         <div className="min-h-screen bg-background flex items-center font-display justify-center px-4">
-             <div className="w-full max-w-md bg-primary-hover rounded-2xl p-8">
+             <div className="w-full max-w-md bg-black/40 rounded-2xl p-8">
                 <div className="text-center mb-8">
                     <span className="text-2xl font-semibold text-primary">Pocket<span className="text-text">Ledger</span></span>
                     <p className="text-text text-lg mt-2">

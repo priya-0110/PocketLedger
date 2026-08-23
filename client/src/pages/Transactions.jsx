@@ -110,7 +110,7 @@ function Transactions(){
                                         
                                             <div className="absolute -left-8.25 top-2 h-4 w-4 rounded-full border-4 border-background bg-primary">
                                             </div>
-                                            <div className="bg-primary-hover rounded-xl p-4 mt-3 w-full max-w-md">
+                                            <div className="bg-background rounded-xl p-4 mt-3 w-full max-w-md">
                             <h1 className="text-xl font-semibold">
                                 {transaction.title}
                             </h1>
