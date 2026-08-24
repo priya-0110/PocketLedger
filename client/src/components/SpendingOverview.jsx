@@ -39,11 +39,11 @@ const spendingData = [
         amount: 5000,
     },
 ];
-function SpendingOverview(){
+function SpendingOverview({title}){
 
     return(
         <div className="p-3 bg-background rounded-2xl mt-6">
-            <h1 className="text-xl font-semibold p-3">Spending Overview</h1>
+            <h1 className="text-xl font-semibold p-3">{title}</h1>
             <div className="grid grid-cols-2 items-center gap-5">
                 <div className="h-72 ">
                 <ResponsiveContainer width="100%" height="100%">
