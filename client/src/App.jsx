@@ -9,6 +9,7 @@ import Accounts from './pages/Accounts'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 import Login from './pages/Login'
+import SignUp from './components/SignUp'
 function App() {
 
   return (
@@ -50,6 +51,7 @@ function App() {
                 />
         </Route>
         <Route path='/login' element={<Login/>}/>
+        <Route path='/signup' element={<SignUp/>}/>
 
       </Routes>
       
