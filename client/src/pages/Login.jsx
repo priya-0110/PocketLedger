@@ -1,12 +1,37 @@
 import { useState } from "react";
 import { Eye,EyeOff } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 function Login(){    
+    const Navigate = useNavigate();
     const[showPaswword,setShowPassword] = useState(false);
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("");
-    const handleSubmit = (e)=>{
+    const [message,setMessage] = useState("")
+    const [error,setError] = useState("")
+    const handleSubmit = async(e)=>{
         e.preventDefault();
+        const response = await fetch("http://localhost:5000/api/auth/login",{
+            method:"POST",
+            headers:{
+                "Content-Type" : "application/json"
+            },
+            body:JSON.stringify({
+                email,password
+            })
+        })
+        const data = await response.json();
+        if(response.ok){
+            setMessage(data.message)
+            setError("")
+            setTimeout(() => {
+                Navigate("/Dashboard")
+            }, 1500);
+        }else{
+            setError(data.message)
+            setMessage("")
+            
+        }
+
                 
     }
     return(
@@ -25,6 +50,7 @@ function Login(){
                             type="email"
                             placeholder="Enter your email"
                             className="w-full rounded-lg bg-background border border-primary p-3 text-text outline-none focus:border-accent"
+                            onChange={(e)=>setEmail(e.target.value)}
                         />
                     </div>
                     <div>
@@ -34,6 +60,7 @@ function Login(){
                             type={showPaswword?"text":"password"}
                             placeholder="Enter your Password"
                             className="w-full rounded-lg bg-background border border-primary p-3 text-text outline-none focus:border-accent"
+                            onChange={(e)=>setPassword(e.target.value)}
                         />
                         <button className="absolute right-3 top-1/2 -translate-y-1/2 text-muted  hover:text-primary" onClick={()=>{setShowPassword(!showPaswword)}}>{showPaswword?<Eye/>:<EyeOff/>}</button>
                         </div>
@@ -49,11 +76,13 @@ function Login(){
                     Don't have an account?{" "}
                     <Link
                         to="/signup"
-                        className="text-accent font-medium"
+                        className="text-text/80 font-medium hover:text-text"
                     >
                         Sign Up
                     </Link>
                 </p>
+                {message && <p className="text-text p-3 text-center">{message}</p>}
+             {error && <p className="text-red-500 p-3 text-center">{error}</p>}
              </div>
         </div>
     )
