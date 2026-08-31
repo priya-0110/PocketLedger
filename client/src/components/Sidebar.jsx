@@ -43,8 +43,8 @@ function Sidebar(){
                     <NavLink className={({isActive})=>
                     
                         isActive?
-                    "flex items-center gap-3 px-6 py-2.5 m-2 rounded-lg text-primary bg-background/10 ":
-                    "flex items-center gap-3 px-6 py-2.5 m-2 rounded-lg text-text"
+                    "flex items-center gap-3 px-6 py-2.5 m-2 rounded-lg text-primary bg-background/10 hover:text-primary ":
+                    "flex items-center gap-3 px-6 py-2.5 m-2 rounded-lg text-text hover:text-primary"
                     } key = {navs.path} to={navs.path}>
                         <Ic />
                         {navs.name}

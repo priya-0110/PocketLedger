@@ -1,26 +1,51 @@
 import { Eye, UserRound, Mail, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link,useNavigate } from "react-router";
 
 function Signup() {
+    const navigate = useNavigate();
     const [showPassword,setShowPassword] = useState(false);
     const [showConfirmPassword,setConfirmShowPassword] = useState(false);
     const [name,setName] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [confirmPassword,setConfirmPassword] = useState("");
-    const handleSignup = (e)=>{
+    const [message,setMessage] = useState("");
+    const [error,setError] = useState("")
+    const handleSignup = async (e)=>{
         e.preventDefault();
         if(password === "" || confirmPassword === "" || name==="" || email===""){
-            console.log("All fields are required")
+            setError("All fields are required")
             return;
         }
         if(password!==confirmPassword){
-            console.log("Passsword and confirm Password should be same")
+            setError("Passsword and confirm Password should be same")
             return;
         }
-        
-        console.log(name.trim());
+        const response = await fetch("http://localhost:5000/api/auth/signup",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                name,email,password
+            })
+        })
+        const data = await response.json();
+        if(response.ok){
+            setError("")
+            setMessage(data.message);
+            setTimeout(() => {
+                navigate('/login')
+            }, 1500);
+            setName("")
+            setEmail("")
+            setPassword("")
+            setConfirmPassword("")
+        }else{
+            setMessage("")
+            setError(data.message);
+        }
         
     }
     return (
@@ -139,11 +164,13 @@ function Signup() {
                             </button>
                         </div>
                     </div>
+                    {message && (<p className="text-text p-3 text-center">{message}</p>)}
+                    {error && (<p className="text-red-500 p-3 text-center">{error}</p>)} 
 
                     {/* Create Account */}
                     <button
                         type="submit"
-                        className="w-full rounded-lg bg-accent py-3 font-medium text-primary transition hover:opacity-90"
+                        className="w-full bg-background rounded-lg py-3 font-medium text-primary-hover transition hover:text-primary"
                         
                     >
                         Create Account
