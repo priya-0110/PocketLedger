@@ -2,6 +2,7 @@ const express = require("express");
 const {MongoClient} = require("mongodb")
 const bcrypt = require('bcrypt')
 const cors = require('cors')
+const jwt = require('jsonwebtoken')
 require("dotenv").config();
 const app = express();
 app.use(cors());
@@ -40,6 +41,7 @@ app.post('/api/auth/signup',async(req,res)=>{
         password:hashedPassword
         }
         const result = await users.insertOne(newUser);
+
         res.status(201).json({
         message:"User Created Succesfully"
         })
@@ -62,7 +64,14 @@ app.post('/api/auth/login',async(req,res)=>{
         if(!isPasswordCorrect){
             return res.status(401).json({message:"Your Password is Incorrect"})
         }
-        res.json({message:"You are going to log in"})
+        const token = jwt.sign(
+            {userId : existingUser._id},
+            process.env.JWT_SECRET,
+            {expiresIn:"1h"}
+
+        )
+        
+        res.json({message:"Log in Successful", "token":token})
     }catch(err){
         res.json({message:"Internal Server Error"});
     }
