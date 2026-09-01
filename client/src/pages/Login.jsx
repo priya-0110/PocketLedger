@@ -26,11 +26,15 @@ function Login(){
             setTimeout(() => {
                 Navigate("/Dashboard")
             }, 1500);
+            localStorage.setItem("token",data.token)
+            const token = localStorage.getItem("token")
+            console.log(token)
         }else{
             setError(data.message)
             setMessage("")
             
         }
+        
 
                 
     }
