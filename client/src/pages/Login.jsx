@@ -8,12 +8,13 @@ function Login(){
     const [password,setPassword] = useState("");
     const [message,setMessage] = useState("")
     const [error,setError] = useState("")
+    
     const handleSubmit = async(e)=>{
         e.preventDefault();
         const response = await fetch("http://localhost:5000/api/auth/login",{
             method:"POST",
             headers:{
-                "Content-Type" : "application/json"
+                "Content-Type" : "application/json",
             },
             body:JSON.stringify({
                 email,password
@@ -28,14 +29,13 @@ function Login(){
             }, 1500);
             localStorage.setItem("token",data.token)
             const token = localStorage.getItem("token")
-            console.log(token)
         }else{
             setError(data.message)
             setMessage("")
             
         }
+         const token = localStorage.getItem("token")
         
-
                 
     }
     return(
@@ -66,7 +66,7 @@ function Login(){
                             className="w-full rounded-lg bg-background border border-primary p-3 text-text outline-none focus:border-accent"
                             onChange={(e)=>setPassword(e.target.value)}
                         />
-                        <button className="absolute right-3 top-1/2 -translate-y-1/2 text-muted  hover:text-primary" onClick={()=>{setShowPassword(!showPaswword)}}>{showPaswword?<Eye/>:<EyeOff/>}</button>
+                        <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted  hover:text-primary" onClick={()=>{setShowPassword(!showPaswword)}}>{showPaswword?<Eye/>:<EyeOff/>}</button>
                         </div>
                     </div>
                     <button
