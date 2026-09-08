@@ -1,5 +1,5 @@
 const express = require("express");
-const {MongoClient} = require("mongodb")
+const {MongoClient,ObjectId} = require("mongodb")
 const bcrypt = require('bcrypt')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
@@ -10,7 +10,25 @@ const PORT = 5000;
 const client = new MongoClient(process.env.MONGO_URI)
 const pocketLedger = client.db('pocketLedger')
 const users = pocketLedger.collection('users');
+const transactions = pocketLedger.collection('transactions')
 app.use(express.json())
+const authMiddleware =(req,res,next)=>{
+    const authHeader = req.headers.authorization;
+    if(!authHeader){
+        return res.status(401).json({message:"Authentication Required"})
+    }
+    const token = authHeader.split(" ")[1];
+    if(!token){
+        res.status(401).json({message:"Token Required"})
+    }
+    try{
+        const decoded = jwt.verify(token,process.env.JWT_SECRET)
+        req.user = decoded
+        next();
+    }catch(err){
+        return res.status(401).json({message:"Token Invalid or Expired Token"})
+    }
+}
 const connectToDB = async ()=>{
     try{
         await client.connect();
@@ -21,8 +39,38 @@ const connectToDB = async ()=>{
     }
 }
 connectToDB();
-app.get('/',(req,res)=>{
-    res.send("Hello V")
+app.get('/api/transactions',authMiddleware,async(req,res)=>{
+    try{
+        const userId = req.user.userId;
+        const userTransactions = await transactions.find({userId:userId}).toArray();
+        res.status(200).json(userTransactions);
+
+    }catch(err){
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+})
+app.post('/api/transactions',authMiddleware,async(req,res)=>{
+    const {title,category,description,date,amount,type} = req.body;
+    const transaction = {title,category,description,date,amount,type,userId:req.user.userId};
+    await transactions.insertOne(transaction);
+    res.status(201).json({message:"Transaction created"});
+})
+app.delete('/api/transactions/:id',authMiddleware,async(req,res)=>{
+    try{
+        const transactionId = req.params.id;
+        const userId = req.user.userId;
+        const result = await transactions.deleteOne({_id:new ObjectId(transactionId),userId:userId});
+        if(result.deletedCount ==0){
+            return res.status(404).json({message:"Transaction not found"});
+        }
+        res.status(200).json({
+            message: "Transaction deleted successfully"
+        });
+    }catch(err){
+        return res.status(500).json({message:"Internal Server Error"});
+    }
 })
 app.post('/api/auth/signup',async(req,res)=>{
     try{
