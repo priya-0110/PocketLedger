@@ -1,64 +1,10 @@
-import { Search,Plus ,Dot} from "lucide-react";
-const transactions = [
-    {
-        title: "Dinner",
-        category: "Food",
-        description: "Dinner at restaurant",
-        date: "2026-08-19",
-        amount: 850,
-        type: "expense",
-    },
-    {
-        title: "Salary",
-        category: "Income",
-        description: "Monthly salary",
-        date: "2026-08-18",
-        amount: 45000,
-        type: "income",
-    },
-    {
-        title: "New Shoes",
-        category: "Shopping",
-        description: "Sports shoes",
-        date: "2026-08-17",
-        amount: 2200,
-        type: "expense",
-    },
-    {
-        title: "Metro Recharge",
-        category: "Transport",
-        description: "Monthly metro recharge",
-        date: "2026-08-16",
-        amount: 1500,
-        type: "expense",
-    },
-    {
-        title: "Electricity Bill",
-        category: "Bills",
-        description: "Monthly electricity bill",
-        date: "2026-08-15",
-        amount: 2400,
-        type: "expense",
-    },
-    {
-        title: "Freelance Payment",
-        category: "Income",
-        description: "Website project payment",
-       date: "2026-08-14",
-        amount: 8000,
-        type: "income",
-    },
-    {
-    title: "Coffee",
-    category: "Food",
-    description: "Morning coffee",
-    date: "2026-08-19",
-    amount: 180,
-    type: "expense",
-}
-];
-
-const formatDate = (date)=>{
+import { Search,Plus ,Dot, Trophy, Trash, AwardIcon} from "lucide-react";
+import { useEffect, useState } from "react";
+import AddTransaction from "../components/AddTransactions";;
+function Transactions(){
+    const [addTransaction,setAddTransaction] = useState(false);
+    const [transactions,setTransactions] = useState([])
+    const formatDate = (date)=>{
     return new Date(date).toLocaleDateString("en-In",{
         day:"numeric",
         month:"long",
@@ -73,9 +19,50 @@ const groupedTransactions = transactions.reduce((group,transaction)=>{
     group[date].push(transaction);
     return group;
 },{})
+const getTransactions = async ()=>{
+            try{
+                const token = localStorage.getItem("token");
+                const response = await fetch('http://localhost:5000/api/transactions',{
+                    method:"GET",
+                    headers:{
+                        "Content-Type" : "application/json",
+                        "Authorization" : `Bearer ${token}`
+                     }
+                })
+                const data = await response.json();
+                const sortedData = data.sort(
+                    (a,b)=> new Date(b.date) - new Date(a.date)
+                )
+                if(response.ok){
+                    setTransactions(sortedData)
+                }
+            }catch(err){
+                console.log(err);
+            }
+}
+const deleteTransactions = async (id)=>{
+    const token = localStorage.getItem("token");
+    const response = await fetch(
+        `http://localhost:5000/api/transactions/${id}`,
+        {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }
+    );
+    const data = await response.json();
+    if (response.ok) {
+        getTransactions();
+    } else {
+        console.log(data.message);
+    }
 
-
-function Transactions(){
+}
+    useEffect(()=>{
+        
+        getTransactions();
+    },[])
     return(
         <div>
             <h2 className="text-4xl">Transactions</h2>
@@ -89,7 +76,7 @@ function Transactions(){
                />
               </div>
               <div>
-                <button className="bg-background flex px-3 py-3 rounded-lg border-border" ><Plus/> ADD TRANSACTIONS</button>
+                <button onClick={()=>setAddTransaction(true)} className="bg-background flex px-3 py-3 rounded-lg border-border" ><Plus/> Add Transactions</button>
               </div>
               
             </div>
@@ -111,9 +98,12 @@ function Transactions(){
                                             <div className="absolute -left-8.25 top-2 h-4 w-4 rounded-full border-4 border-background bg-primary">
                                             </div>
                                             <div className="bg-background rounded-xl p-4 mt-3 w-full max-w-md">
-                            <h1 className="text-xl font-semibold">
+                            <div className="flex justify-between">
+                                <h1 className="text-xl font-semibold">
                                 {transaction.title}
                             </h1>
+                            <button onClick={()=>deleteTransactions(transaction._id)}><Trash/></button>
+                            </div>
 
                             <h2 className="text-lg text-muted">
                                 {transaction.category} •{" "}
@@ -136,6 +126,8 @@ function Transactions(){
                 }
 
               </div>
+              {addTransaction && <AddTransaction onClose = {()=>setAddTransaction(false)} getTrransactions={getTransactions}/>}
+              
         </div>
 
     )
