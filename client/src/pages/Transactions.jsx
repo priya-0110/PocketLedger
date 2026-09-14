@@ -1,9 +1,11 @@
-import { Search,Plus ,Dot, Trophy, Trash, AwardIcon} from "lucide-react";
+import { Search,Plus,Trash, AwardIcon,SquarePen} from "lucide-react";
 import { useEffect, useState } from "react";
 import AddTransaction from "../components/AddTransactions";;
 function Transactions(){
     const [addTransaction,setAddTransaction] = useState(false);
     const [transactions,setTransactions] = useState([])
+    const [search,setSearch] = useState("");
+    const [editingTransaction,setEditingTransaction] = useState(null)
     const formatDate = (date)=>{
     return new Date(date).toLocaleDateString("en-In",{
         day:"numeric",
@@ -11,14 +13,6 @@ function Transactions(){
         year:"numeric"
     })
 }
-const groupedTransactions = transactions.reduce((group,transaction)=>{
-    const date = transaction.date;
-    if(!group[date]){
-        group[date] = [];
-    }
-    group[date].push(transaction);
-    return group;
-},{})
 const getTransactions = async ()=>{
             try{
                 const token = localStorage.getItem("token");
@@ -39,6 +33,10 @@ const getTransactions = async ()=>{
             }catch(err){
                 console.log(err);
             }
+}
+const handleClose = ()=>{
+    setAddTransaction(false);
+    setEditingTransaction(null);
 }
 const deleteTransactions = async (id)=>{
     const token = localStorage.getItem("token");
@@ -63,6 +61,19 @@ const deleteTransactions = async (id)=>{
         
         getTransactions();
     },[])
+    const filteredTransaction = transactions.filter((transaction)=>
+        transaction.title.toLowerCase().includes(search.toLowerCase()) ||
+     transaction.category.toLowerCase().includes(search.toLowerCase()) ||
+      transaction.description.toLowerCase().includes(search.toLowerCase())
+    );
+    const groupedTransactions = filteredTransaction.reduce((group,transaction)=>{
+    const date = transaction.date;
+    if(!group[date]){
+        group[date] = [];
+    }
+    group[date].push(transaction);
+    return group;
+},{})
     return(
         <div>
             <h2 className="text-4xl">Transactions</h2>
@@ -73,6 +84,8 @@ const deleteTransactions = async (id)=>{
                type="text"
                placeholder="Search Transactions..."
                className="w-full rounded-lg border border-border bg-background py-3 pl-10 pr-4 text-text outline-none focus:border-accent"
+               value={search}
+               onChange={(e)=>setSearch(e.target.value)}
                />
               </div>
               <div>
@@ -102,7 +115,11 @@ const deleteTransactions = async (id)=>{
                                 <h1 className="text-xl font-semibold">
                                 {transaction.title}
                             </h1>
-                            <button onClick={()=>deleteTransactions(transaction._id)}><Trash/></button>
+                            <div className="flex gap-2">
+                                <button className="cursor-pointer" onClick={()=>deleteTransactions(transaction._id)}><Trash/></button>
+                            <button onClick={()=>{setEditingTransaction(transaction);
+                                 setAddTransaction(true)}}><SquarePen/></button>
+                            </div>
                             </div>
 
                             <h2 className="text-lg text-muted">
@@ -126,7 +143,7 @@ const deleteTransactions = async (id)=>{
                 }
 
               </div>
-              {addTransaction && <AddTransaction onClose = {()=>setAddTransaction(false)} getTrransactions={getTransactions}/>}
+              {addTransaction && <AddTransaction onClose = {handleClose} getTrransactions={getTransactions} transaction={editingTransaction}/>}
               
         </div>
 

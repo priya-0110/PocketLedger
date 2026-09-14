@@ -1,8 +1,9 @@
 import { X } from "lucide-react";
 import { useState } from "react";
 
-const AddTransaction = ({ onClose,getTrransactions }) => {
-    const [transaction, setTransaction] = useState({
+const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransaction}) => {
+    const [transaction, setTransaction] = useState(
+        editingTransaction || {
         title: "",
         category: "",
         description: "",
@@ -12,19 +13,21 @@ const AddTransaction = ({ onClose,getTrransactions }) => {
     });
     const [message,setMessage] = useState("");
     const [error,setError] = useState("");
-
+    
     const handleChange = (e) => {
         setTransaction({
             ...transaction,
             [e.target.name]: e.target.value
         });
     };
+    const url = editingTransaction ? `http://localhost:5000/api/transactions/${editingTransaction._id}`:'http://localhost:5000/api/transactions'
+    const method = editingTransaction ? "PATCH" : "POST";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem("token")
-        const response = await fetch('http://localhost:5000/api/transactions',{
-            method : "POST",
+        const response = await fetch(url,{
+            method : method,
             headers : {
                 "Content-Type" : "application/json",
                 "Authorization" : `Bearer ${token}`
@@ -51,9 +54,14 @@ const AddTransaction = ({ onClose,getTrransactions }) => {
 
                 {/* Header */}
                 <div className="flex items-center justify-between mb-5">
+                    {editingTransaction ? 
+                    <h2 className="text-2xl font-semibold text-text">
+                        Edit Transaction
+                    </h2> 
+                    :
                     <h2 className="text-2xl font-semibold text-text">
                         Add Transaction
-                    </h2>
+                    </h2>}
 
                     <button
                         type="button"
@@ -193,12 +201,23 @@ const AddTransaction = ({ onClose,getTrransactions }) => {
                     </div>
 
                     {/* Submit */}
+                    {
+                        editingTransaction 
+                        ?
+                        <button
+                        type="submit"
+                        className="w-full bg-primary text-background py-2.5 rounded-lg font-medium hover:opacity-90"
+                    >
+                        Update Transaction
+                    </button>
+                    :
                     <button
                         type="submit"
                         className="w-full bg-primary text-background py-2.5 rounded-lg font-medium hover:opacity-90"
                     >
                         Add Transaction
                     </button>
+                    }
 
                 </form>
                 {message && (<p className="text-text p-3 text-center">{message}</p>)}

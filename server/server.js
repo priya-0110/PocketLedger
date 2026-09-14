@@ -72,6 +72,44 @@ app.delete('/api/transactions/:id',authMiddleware,async(req,res)=>{
         return res.status(500).json({message:"Internal Server Error"});
     }
 })
+app.patch('/api/transactions/:id',authMiddleware,async(req,res)=>{
+    try{
+        const tid = req.params.id;
+        const userId = req.user.userId;
+        const { title, category, description, date, amount, type } = req.body;
+        const result = await transactions.updateOne(
+            {
+                _id:new ObjectId(tid),
+                userId:userId
+            },
+                {
+                $set: {
+                    title,
+                    category,
+                    description,
+                    date,
+                    amount,
+                    type
+                    }
+                }
+
+        );
+        if(result.matchedCount===0){
+            return res.status(404).json({
+                message: "Transaction not found"
+            });
+        }
+        res.status(200).json({
+            message: "Transaction updated successfully"
+        });
+    }catch(err){
+         console.log(err);
+
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+})
 app.post('/api/auth/signup',async(req,res)=>{
     try{
         const {name,email,password} = req.body;
@@ -115,7 +153,7 @@ app.post('/api/auth/login',async(req,res)=>{
         const token = jwt.sign(
             {userId : existingUser._id},
             process.env.JWT_SECRET,
-            {expiresIn:"1h"}
+            {expiresIn:"3h"}
 
         )
         
