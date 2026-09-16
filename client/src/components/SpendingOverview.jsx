@@ -11,36 +11,10 @@ const COLORS = [
     "#587CA5",
     "#41678F",
     "#2A5278",
-    "#0E1F2F",
+    "#86B6CF",
 ];
-const spendingData = [
-    {
-        category: "Food",
-        amount: 4500,
-    },
-    {
-        category: "Shopping",
-        amount: 3200,
-    },
-    {
-        category: "Transport",
-        amount: 2100,
-    },
-    {
-        category: "Bills",
-        amount: 3000,
-    },
-    {
-        category: "Entertainment",
-        amount: 1800,
-    },
-    {
-        category: "Other",
-        amount: 5000,
-    },
-];
-function SpendingOverview({title}){
 
+function SpendingOverview({title,spendingData}){
     return(
         <div className="p-3 bg-background rounded-2xl mt-6">
             <h1 className="text-xl font-semibold p-3">{title}</h1>
