@@ -2,18 +2,63 @@ import { Handbag, HandCoins } from "lucide-react";
 import SummaryCard from "../components/SummaryCard";
 import SpendingOverview from "../components/SpendingOverview";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useState,useEffect } from "react";
+
+function Reports(){
+        const [transactions,setTransactions] = useState([]);
+    const getTransactions = async ()=>{
+            try{
+                const token = localStorage.getItem("token");
+                const response = await fetch('http://localhost:5000/api/transactions',{
+                    method:"GET",
+                    headers:{
+                        "Content-Type" : "application/json",
+                        "Authorization" : `Bearer ${token}`
+                     }
+                })
+                const data = await response.json();
+                const sortedData = data.sort(
+                    (a,b)=> new Date(b.date) - new Date(a.date)
+                )
+                if(response.ok){
+                    setTransactions(sortedData)
+                }
+            }catch(err){
+                console.log(err);
+            }
+}
+useEffect(() => {
+    getTransactions();
+}, []);
+const income = transactions.filter(transaction => transaction.type === "income")
+            .reduce((total,transaction)=>total+Number(transaction.amount),0);
+const expense = transactions.filter(transaction=> transaction.type==="expense")
+                .reduce((total,transaction)=>total+Number(transaction.amount),0);
+const balance = income-expense;
+const expenses = transactions.filter(transaction=>transaction.type==="expense")
+                 .reduce((group,transaction)=>{
+                    const category = transaction.category;
+                    const amount = Number(transaction.amount);
+                    if(!group[category]){
+                        group[category] = amount;
+                    }else{
+                        group[category]+=amount;
+                    }
+                    return group;
+                 },{})
+const spendingData = Object.entries(expenses).map(([category,amount])=>{
+    return {category:category,amount:amount};
+});
 const incomeExpenseData = [
     {
         name: "Income",
-        amount: 53000,
+        amount: `${income}`,
     },
     {
         name: "Expenses",
-        amount: 25000,
+        amount: `${expense}`,
     },
 ];
-
-function Reports(){
     return(
         <div>
             <div className="flex justify-between">
@@ -31,12 +76,12 @@ function Reports(){
         </div>
        <div className="flex justify-center mt-5">
          <div className="grid grid-cols-2 gap-4 w-full">
-            <SummaryCard title = {"Total Income"} amount={"₹53,000"} icon={<HandCoins/>}/>
-            <SummaryCard title = {"Total Expenses"} amount={"₹25,000"} icon={<Handbag/>}/>
+            <SummaryCard title = {"Total Income"} amount={income} icon={<HandCoins/>}/>
+            <SummaryCard title = {"Total Expenses"} amount={expense} icon={<Handbag/>}/>
         </div>
        </div>
        <div className="mt-5">
-        <SpendingOverview title={"Spending By Category"}/>
+        <SpendingOverview title={"Spending By Category"} spendingData={spendingData}/>
        </div>
        <div className="h-100 w-full mt-5 bg-background p-5 pt-7 rounded-2xl">
         <h1 className="text-2xl mb-4">Income VS Expenses</h1>
