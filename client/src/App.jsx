@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { Routes,Route } from 'react-router'
+import { Routes,Route,Navigate} from 'react-router'
 import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Transactions from './pages/Transactions'
@@ -10,6 +10,7 @@ import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 import Login from './pages/Login'
 import SignUp from './components/SignUp'
+import ProtectedRoute from './components/ProtectedRoute'
 function App() {
 
   return (
@@ -18,36 +19,36 @@ function App() {
         <Route element = {<Layout/>}>
                 <Route
                     path="/dashboard"
-                    element={<Dashboard/>}
+                    element={<ProtectedRoute><Dashboard/></ProtectedRoute>}
                 />
                  <Route
                     path="/"
-                    element={<Dashboard/>}
+                    element={<Navigate to={"/login"} replace/>}
                 />
 
                 <Route
                     path="/transactions"
-                    element={<Transactions/>}
+                    element={<ProtectedRoute><Transactions/></ProtectedRoute>}
                 />
 
                 <Route
                     path="/budgets"
-                    element={<Budgets/>}
+                    element={<ProtectedRoute><Budgets/></ProtectedRoute>}
                 />
 
                 <Route
                     path="/reports"
-                    element={<Reports/>}
+                    element={<ProtectedRoute><Reports/></ProtectedRoute>}
                 />
                                 <Route
                     path="/accounts"
-                    element={<Accounts/>}
+                    element={<ProtectedRoute><Accounts/></ProtectedRoute>}
                 />
 
                 
                 <Route
                     path="/settings"
-                    element={<Settings/>}
+                    element={<ProtectedRoute><Settings/></ProtectedRoute>}
                 />
         </Route>
         <Route path='/login' element={<Login/>}/>
