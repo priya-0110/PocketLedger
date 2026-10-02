@@ -134,10 +134,75 @@ app.post('/api/auth/signup',async(req,res)=>{
     }
     catch(err){
         res.status(500).json({message : "Internal Server Error"})
-    }
-        
+    }    
+})
+app.get('/api/auth/me', authMiddleware, async(req,res)=>{
+    try{
+        const userId = req.user.userId;
+        const user = await users.findOne(
+            {_id:new ObjectId(userId)},
+            {
+                projection:{
+                    name:1,
+                    email:1
+                }
+            }
+        )
+        if(!user){
+            return res.status(404).json({message:"User Not Found"})
+        }
+        return res.status(200).json(user)
+    }catch(err){
+        console.log(err);
 
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+
+    }
     
+})
+app.patch('/api/auth/change-password',authMiddleware,async(req,res)=>{
+    try{
+        const userId = req.user.userId;
+        const {currentPassword,newPassword} = req.body;
+        const user = await users.findOne({
+            _id:new ObjectId(userId)
+        })
+        if (!user){
+            return res.status(404).json({ message: "User Not Found" });
+         }
+        const isPasswordCorrect = await bcrypt.compare(currentPassword,user.password);
+        if (!isPasswordCorrect){
+            return res.status(401).json({ message: "Current password is incorrect" });
+        }
+        const hashedPassword = await bcrypt.hash(newPassword,10);
+        await users.updateOne(
+            { _id: new ObjectId(userId) },
+            { $set: { password: hashedPassword } } 
+        );
+        res.status(200).json({ message: "Password changed successfully" });
+    }
+    catch(err){
+        return res.status(500).json({message:"Internal Server Error"})
+    }
+})
+app.patch('/api/auth/me',authMiddleware,async(req,res)=>{
+    try{
+        const userId = req.user.userId;
+    const {name,email} = req.body;
+    const result = await users.updateOne({_id:new ObjectId(userId)},{
+        $set : {
+            name,email
+        }
+    })
+    if(result.matchedCount === 0){
+        return res.status(404).json({message:"User not found"})
+    }
+    return res.status(200).json({message:"User Updated"})
+    }catch(err){
+        res.status(500).json({message:"Internal Server Error"})
+    }
 })
 app.post('/api/auth/login',async(req,res)=>{
     try{
