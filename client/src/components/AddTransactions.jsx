@@ -13,6 +13,7 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
     });
     const [message,setMessage] = useState("");
     const [error,setError] = useState("");
+    const [loading,setLoading] = useState(false);
     
     const handleChange = (e) => {
         setTransaction({
@@ -25,7 +26,24 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const token = localStorage.getItem("token")
+        setError("");
+        setMessage("");
+        if(!transaction.amount||!transaction.title||!transaction.category||!transaction.date){
+            setError("Please fill all required fields");
+            return 
+        }
+        if(transaction.amount<=0){
+            setError("Amount must be greater than 0");
+            return;
+        
+        }
+        if (new Date(transaction.date) > new Date()) {
+                setError("Transaction date cannot be in the future");
+                return;
+            }
+        setLoading(true);
+        try{
+            const token = localStorage.getItem("token")
         const response = await fetch(url,{
             method : method,
             headers : {
@@ -33,8 +51,6 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
                 "Authorization" : `Bearer ${token}`
             },
             body: JSON.stringify(transaction),
-
-
         })
         const data = await response.json();
         if(response.ok){
@@ -44,6 +60,11 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
 
         }else{
             setError(data.message)
+        }
+        }catch(err){
+            setError("Something went Wrong")
+        }finally{
+            setLoading(false);
         }
     };
 
@@ -205,17 +226,19 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
                         editingTransaction 
                         ?
                         <button
+                        disabled={loading}
                         type="submit"
                         className="w-full bg-primary text-background py-2.5 rounded-lg font-medium hover:opacity-90"
                     >
-                        Update Transaction
+                        {loading ? "Updating..." : "Update Transaction"}
                     </button>
                     :
                     <button
+                        disabled={loading}
                         type="submit"
                         className="w-full bg-primary text-background py-2.5 rounded-lg font-medium hover:opacity-90"
                     >
-                        Add Transaction
+                        {loading ? "Adding....":"Add Transaction"}
                     </button>
                     }
 
