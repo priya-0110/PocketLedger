@@ -222,9 +222,9 @@ app.post('/api/auth/login',async(req,res)=>{
 
         )
         
-        res.json({message:"Log in Successful", "token":token})
+        res.status(200).json({message:"Log in Successful", "token":token})
     }catch(err){
-        res.json({message:"Internal Server Error"});
+        res.status(500).json({message:"Internal Server Error"});
     }
 })
 app.listen(PORT,()=>{
