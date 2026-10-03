@@ -32,6 +32,7 @@ function Login(){
         }else{
             setError(data.message)
             setMessage("")
+            return;
             
         }
          const token = localStorage.getItem("token")
