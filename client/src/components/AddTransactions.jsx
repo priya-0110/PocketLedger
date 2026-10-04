@@ -73,7 +73,6 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
 
             <div className="w-full max-w-xl bg-background rounded-xl border border-primary p-6">
 
-                {/* Header */}
                 <div className="flex items-center justify-between mb-5">
                     {editingTransaction ? 
                     <h2 className="text-2xl font-semibold text-text">
@@ -132,6 +131,9 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
                                 <option value="Entertainment">
                                     Entertainment
                                 </option>
+                                <option value="Furniture">Furniture</option>
+                                <option value="Groceries">Groceries</option>
+                                <option value="Internet">Internet</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
@@ -221,7 +223,6 @@ const AddTransaction = ({ onClose,getTrransactions,transaction:editingTransactio
                         </div>
                     </div>
 
-                    {/* Submit */}
                     {
                         editingTransaction 
                         ?
