@@ -1,31 +1,4 @@
-const budgetData = [
-    {
-        category: "Food",
-        budget: 5000,
-        spent: 3500,
-    },
-    {
-        category: "Transport",
-        budget: 3000,
-        spent: 1800,
-    },
-    {
-        category: "Shopping",
-        budget: 4000,
-        spent: 2200,
-    },
-    {
-        category: "Entertainment",
-        budget: 2000,
-        spent: 1200,
-    },
-    {
-    category: "Bills",
-    budget: 3500,
-    spent: 2400,
-},
-];
-
+import { useEffect, useState } from "react";
 const findingPercentage = (budget, spent) => {
     if (budget === 0) {
         return 0;
@@ -36,6 +9,39 @@ const findingPercentage = (budget, spent) => {
 };
 
 function BudgetsOverview() {
+    const [budgetData,setBudgetData] = useState([]);
+    const [error,setError] = useState("");
+    const [loading,setLoading] = useState(false);
+    const getBudgets = async()=>{
+        setLoading(true);
+        setError("");
+        try{
+            const token = localStorage.getItem("token");
+            const date = new Date();
+            const month = date.toISOString().slice(0,7);
+            const response = await fetch(`http://localhost:5000/api/budgets?month=${month}`,{
+                method:"GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            const data = await response.json();
+            if(response.ok){
+                setBudgetData(data)                
+            }
+            if(!response.ok){
+                setError(data.message || "Failed to Load Budgets")
+            }
+
+        }catch(err){
+            setError("Failed to load Budgets");
+        }finally{
+            setLoading(false);
+        }
+    }
+    useEffect(()=>{
+            getBudgets();
+        },[])
     return (
         <div className="bg-background mt-5 rounded-2xl p-5">
 
@@ -56,7 +62,7 @@ function BudgetsOverview() {
                 {budgetData.map((data) => {
 
                     const percentage = findingPercentage(
-                        data.budget,
+                        data.amount,
                         data.spent
                     );
 
@@ -72,7 +78,7 @@ function BudgetsOverview() {
                                 <p className="text-muted">
                                     ₹{data.spent.toLocaleString("en-IN")}
                                     {" / "}
-                                    ₹{data.budget.toLocaleString("en-IN")}
+                                    ₹{data.amount.toLocaleString("en-IN")}
                                 </p>
                             </div>
 

@@ -11,6 +11,7 @@ const client = new MongoClient(process.env.MONGO_URI)
 const pocketLedger = client.db('pocketLedger')
 const users = pocketLedger.collection('users');
 const transactions = pocketLedger.collection('transactions')
+const budgets = pocketLedger.collection('budgets');
 app.use(express.json())
 const authMiddleware =(req,res,next)=>{
     const authHeader = req.headers.authorization;
@@ -226,6 +227,120 @@ app.post('/api/auth/login',async(req,res)=>{
     }catch(err){
         res.status(500).json({message:"Internal Server Error"});
     }
+})
+app.post('/api/budgets',authMiddleware,async(req,res)=>{
+    try{
+        const {category,amount} = req.body;
+        const userId = req.user.userId;
+        const month = new Date().toISOString().slice(0,7);
+        const budget = {
+            userId : userId,
+            category: category,
+            amount: Number(amount),
+            month: month
+        }
+        const existingBudget = await budgets.findOne({
+            userId:userId,
+            category:category,
+            month:month
+        });
+        if(existingBudget){
+            return res.status(409).json({message:"Budget for this category already exists for this month"})
+        }
+        await budgets.insertOne(budget);
+        res.status(201).json({message:"Budget Created Successfully"});
+    }catch(err){
+        res.status(500).json({message:"Internal Server Error"});
+    }
+})
+app.get('/api/budgets', authMiddleware,async(req,res)=>{
+    try{
+        const userId = req.user.userId;
+        const {month} = req.query;
+        if(!month || !/^\d{4}-(0[1-9]|1[0-2])$/.test(month)){
+            return res.status(400).json({message:"Month is required and must be in YYYY-MM Format"})
+        }
+        const userBudget = await budgets.find({
+            userId: userId,
+            month:month
+        }).toArray();
+        const budgetWithSpent = [];
+        for(const budget of userBudget){
+            const budgetTransaction = await transactions.find({
+                userId:userId,
+                category:budget.category,
+                type:"expense",
+                date:{
+                    $regex:`^${budget.month}`
+                }
+            }).toArray();
+            let spent = 0;
+            for(const transaction of budgetTransaction){
+                spent+=Number(transaction.amount);
+            }
+            budgetWithSpent.push({
+                _id:budget._id,
+                category: budget.category,
+                amount: budget.amount,
+                spent: spent
+            });
+        }
+        res.status(200).send(budgetWithSpent);
+    }catch(err){
+        res.status(500).json({message:"Internal Server Error"});
+    }
+})
+app.delete('/api/budget/:id',authMiddleware,async(req,res)=>{
+    try{
+        const budgetId = req.params.id;
+        const userId = req.user.userId;
+        const result = await budgets.deleteOne({
+            _id:new ObjectId(budgetId),
+            userId: userId,
+        })
+        if (result.deletedCount === 0) {
+            return res.status(404).json({
+                message: "Budget not found"
+            });
+        }
+        res.status(200).json({
+            message: "Budget deleted successfully"
+        });
+    }catch (err) {
+
+        res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+})
+app.patch('/api/budget/:id',authMiddleware,async(req,res)=>{
+    try{
+        const budgetId = req.params.id;
+        const userId = req.user.userId;
+        const {amount} = req.body;
+        const result = await budgets.updateOne({
+            _id:new ObjectId(budgetId),
+            userId: userId
+        },{
+            $set:{
+                amount:Number(amount)
+            }
+        })
+         if (result.matchedCount === 0) {
+            return res.status(404).json({
+                message: "Budget not found"
+            });
+        }
+
+        res.status(200).json({
+            message: "Budget updated successfully"
+        });
+    }catch(err){
+         res.status(500).json({
+            message: "Internal Server Error"
+        });
+    }
+
 })
 app.listen(PORT,()=>{
     console.log(`server running on port ${5000}`)
