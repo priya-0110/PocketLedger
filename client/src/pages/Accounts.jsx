@@ -25,8 +25,35 @@ function Accounts() {
 
     const [isEditing, setIsEditing] = useState(false);
     const [isChangePassword, setChangePassword] = useState(false);
-
-
+    const [transactions,setTransactions] = useState([]);
+    const getTransactions = async ()=>{
+            try{
+                const token = localStorage.getItem("token");
+                const response = await fetch('http://localhost:5000/api/transactions',{
+                    method:"GET",
+                    headers:{
+                        "Content-Type" : "application/json",
+                        "Authorization" : `Bearer ${token}`
+                     }
+                })
+                const data = await response.json();
+                const sortedData = data.sort(
+                    (a,b)=> new Date(b.date) - new Date(a.date)
+                )
+                if(response.ok){
+                    setTransactions(sortedData)
+                }
+            }catch(err){
+                console.log(err);
+            }
+}
+useEffect(() => {
+    getTransactions();
+}, []);
+const income = transactions.filter(transaction => transaction.type === "income")
+            .reduce((total,transaction)=>total+Number(transaction.amount),0);
+const expense = transactions.filter(transaction=> transaction.type==="expense")
+                .reduce((total,transaction)=>total+Number(transaction.amount),0);
     // Get current user
     const getUserData = async () => {
 
@@ -259,7 +286,7 @@ function Accounts() {
                         </span>
 
                         <span className="font-semibold text-text">
-                            24
+                            {transactions.length}
                         </span>
 
                     </div>
@@ -272,7 +299,7 @@ function Accounts() {
                         </span>
 
                         <span className="font-semibold text-text">
-                            ₹53,000
+                            {income}
                         </span>
 
                     </div>
@@ -285,7 +312,7 @@ function Accounts() {
                         </span>
 
                         <span className="font-semibold text-text">
-                            ₹19,600
+                            {expense}
                         </span>
 
                     </div>

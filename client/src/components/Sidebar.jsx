@@ -40,19 +40,42 @@ function Sidebar(){
                 Navigate("/Login")
             }, 1500);
     }
+    const mainNavigation = navigation.slice(0, 4);
+    const accountNavigation = navigation.slice(4);
     return(
-        <aside className="w-70 bg-background text-text text-xl p-3 font-display flex flex-col justify-between">
+        <aside className="w-64 shrink-0 bg-background border-r border-border text-text p-4 font-display flex flex-col justify-between">
             
-                <div>
+                <div className="space-y-1">
+                    <p className="px-4 mb-2 text-xs font-semibold uppercase tracking-wider text-muted">
+                        Main
+                    </p>
                     {
-                navigation.map(navs =>{
+                mainNavigation.map(navs =>{
                     const Ic = navs.icon;
                     return(                    
                     <NavLink className={({isActive})=>
                     
                         isActive?
-                    "flex items-center gap-3 px-6 py-2.5 m-2 rounded-lg text-primary bg-background/10 hover:text-primary ":
-                    "flex items-center gap-3 px-6 py-2.5 m-2 rounded-lg text-text hover:text-primary"
+                    "flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary transition-colors":
+                    "flex items-center gap-3 px-4 py-3 rounded-xl text-muted hover:bg-primary/5 hover:text-primary transition-colors"
+                    } key = {navs.path} to={navs.path}>
+                        <Ic />
+                        {navs.name}
+                    </NavLink>
+                )})
+            }
+            <p className="px-4 mb-2 mt-6 text-xs font-semibold uppercase tracking-wider text-muted">
+                Account
+            </p>
+            {
+                accountNavigation.map(navs =>{
+                    const Ic = navs.icon;
+                    return(                    
+                    <NavLink className={({isActive})=>
+                    
+                        isActive?
+                    "flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary transition-colors":
+                    "flex items-center gap-3 px-4 py-3 rounded-xl text-muted hover:bg-primary/5 hover:text-primary transition-colors"
                     } key = {navs.path} to={navs.path}>
                         <Ic />
                         {navs.name}
@@ -60,7 +83,7 @@ function Sidebar(){
                 )})
             }
                 </div>
-            <button onClick={()=>onLogout()}className="flex gap-2 justify-center text-semibold p-2 bg-primary-hover text-primary mt-auto">Logout <LogOut/></button>
+            <button onClick={()=>onLogout()}className="w-full bg-primary-hover flex items-center gap-3 px-4 py-3 rounded-xl text-primary hover:bg-red-500/10 hover:text-red-500 transition-colors">Logout <LogOut/></button>
             
         </aside>
     )

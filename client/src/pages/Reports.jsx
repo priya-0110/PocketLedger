@@ -6,6 +6,7 @@ import { useState,useEffect } from "react";
 
 function Reports(){
         const [transactions,setTransactions] = useState([]);
+        const [timeFilter,setTimeFilter] = useState('This Month')
     const getTransactions = async ()=>{
             try{
                 const token = localStorage.getItem("token");
@@ -30,12 +31,67 @@ function Reports(){
 useEffect(() => {
     getTransactions();
 }, []);
-const income = transactions.filter(transaction => transaction.type === "income")
+const filteredTransactions = transactions.filter((transaction)=>{
+    const transactionDate = new Date(transaction.date);
+    const now = new Date();
+    if(timeFilter === 'All Time'){
+        return true;
+    }
+    if (timeFilter === "This Month") {
+        return (
+            transactionDate.getMonth() === now.getMonth() &&
+            transactionDate.getFullYear() === now.getFullYear()
+        );
+    }
+    if (timeFilter === "Today") {
+    return (
+        transactionDate.getDate() === now.getDate() &&
+        transactionDate.getMonth() === now.getMonth() &&
+        transactionDate.getFullYear() === now.getFullYear()
+    );
+}
+if (timeFilter === "This Week") {
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    return transactionDate >= startOfWeek && transactionDate <= now;
+}
+
+    if (timeFilter === "Last Month") {
+        const lastMonth = new Date(
+            now.getFullYear(),
+            now.getMonth() - 1
+        );
+
+        return (
+            transactionDate.getMonth() === lastMonth.getMonth() &&
+            transactionDate.getFullYear() === lastMonth.getFullYear()
+        );
+    }
+
+    if (timeFilter === "Last 3 Months") {
+        const threeMonthsAgo = new Date(
+            now.getFullYear(),
+            now.getMonth() - 2,
+            1
+        );
+
+        return transactionDate >= threeMonthsAgo && transactionDate <= now;
+    }
+
+    if (timeFilter === "This Year") {
+        return transactionDate.getFullYear() === now.getFullYear();
+    }
+
+    return true;
+})
+const income = filteredTransactions.filter(transaction => transaction.type === "income")
             .reduce((total,transaction)=>total+Number(transaction.amount),0);
-const expense = transactions.filter(transaction=> transaction.type==="expense")
+const expense = filteredTransactions.filter(transaction=> transaction.type==="expense")
                 .reduce((total,transaction)=>total+Number(transaction.amount),0);
 const balance = income-expense;
-const expenses = transactions.filter(transaction=>transaction.type==="expense")
+const expenses = filteredTransactions.filter(transaction=>transaction.type==="expense")
                  .reduce((group,transaction)=>{
                     const category = transaction.category;
                     const amount = Number(transaction.amount);
@@ -63,15 +119,18 @@ const incomeExpenseData = [
         <div>
             <div className="flex justify-between">
             <h1 className="text-4xl">Reports</h1>
-                <select name="Select Time Range" className="bg-background border-text p-3 rounded-sm border-2">
+                <select name="Select Time Range" 
+                onChange={(e)=>setTimeFilter(e.target.value)}
+                className="bg-background border-text p-3 rounded-sm border-2">
                     <option>Select Time Range</option>
+                    <option value="All Time">All Time</option>
                     <option value="This Month">This Month</option>
                     <option value="This Week">This Week</option>
                     <option value="This Year">This Year</option>
+                    <option value="Last Month">Last Month</option>
+                    <option value="Last 3 Months">Last 3 Months</option>
                     <option value="Today">Today</option>
-                </select>
-                
-               
+                </select>               
             
         </div>
        <div className="flex justify-center mt-5">

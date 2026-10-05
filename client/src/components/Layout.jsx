@@ -7,9 +7,11 @@ function Layout(){
       <Navbar/>
       <div className="flex flex-1">
         <Sidebar/>
-        <main className="flex-1 bg-surface p-6 text-text font-display">
-            <Outlet/>
-        </main>
+        <main className="flex-1 bg-surface text-text font-display overflow-y-auto">
+    <div className="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8">
+        <Outlet />
+    </div>
+</main>
       </div>
       
     </div>
