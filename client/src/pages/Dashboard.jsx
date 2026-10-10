@@ -54,13 +54,13 @@ const spendingData = Object.entries(expenses).map(([category,amount])=>{
             <div>
                 <h1 className="text-4xl">Dashboard</h1>            
             </div> 
-            <div className="grid grid-cols-4 gap-5 mt-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 m-2.5 mt-6">
                 <SummaryCard title="Total Balance" amount={balance} icon={<Wallet/>}/>
                  <SummaryCard title="Income" amount={income}icon={<BanknoteArrowUp/>}/>
                   <SummaryCard title="Expenses" amount={expense} icon={<BanknoteArrowDown/>}/>
                    <SummaryCard title="Savings" amount={balance} icon={<HandCoins/>}/>
             </div>  
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 m-2.5">
                 <div>
                 <SpendingOverview title={"Spending Overview"} spendingData={spendingData}/>
             </div>

@@ -268,9 +268,6 @@ const expense = transactions.filter(transaction=> transaction.type==="expense")
 
             </div>
 
-
-            {/* Account Overview */}
-
             <div className="mt-5 rounded-2xl bg-background p-6 mb-6">
 
                 <h2 className="text-xl font-semibold text-text">
