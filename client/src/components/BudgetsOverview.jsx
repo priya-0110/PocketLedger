@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router";
 const findingPercentage = (budget, spent) => {
     if (budget === 0) {
         return 0;
@@ -43,61 +44,69 @@ function BudgetsOverview() {
             getBudgets();
         },[])
     return (
-        <div className="bg-background mt-5 rounded-2xl p-5">
+        <div className="bg-background border border-border rounded-2xl p-4 sm:p-5">
 
-            {/* Header */}
-            <div className="flex items-center justify-between">
-                <h1 className="text-xl font-semibold text-text">
-                    Budget Overview
-                </h1>
+    {/* Header */}
+    <div className="flex items-center justify-between gap-4">
 
-                <button className="text-sm text-accent">
-                    View All
-                </button>
-            </div>
+        <h1 className="text-xl font-semibold text-text">
+            Budget Overview
+        </h1>
+        <NavLink className="text-sm text-accent hover:text-primary transition-colors shrink-0" to={'/budgets'}>View All</NavLink>
 
-            {/* Budget List */}
-            <div className="mt-5 flex flex-col gap-5">
+    </div>
 
-                {budgetData.map((data) => {
 
-                    const percentage = findingPercentage(
-                        data.amount,
-                        data.spent
-                    );
+    {/* Budget List */}
+    <div className="mt-6 flex flex-col gap-5">
 
-                    return (
-                        <div key={data.category}>
+        {budgetData.map((data) => {
 
-                            {/* Category and Amount */}
-                            <div className="flex items-center justify-between">
-                                <p className="text-text">
-                                    {data.category}
-                                </p>
+            const percentage = findingPercentage(
+                data.amount,
+                data.spent
+            );
 
-                                <p className="text-muted">
-                                    ₹{data.spent.toLocaleString("en-IN")}
-                                    {" / "}
-                                    ₹{data.amount.toLocaleString("en-IN")}
-                                </p>
-                            </div>
+            return (
 
-                            {/* Progress Bar */}
-                            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-text">
-                                <div
-                                    className="h-full rounded-full bg-primary"
-                                    style={{
-                                        width: `${Math.min(percentage, 100)}%`,
-                                    }}
-                                ></div>
-                            </div>
+                <div key={data.category}>
 
-                        </div>
-                    );
-                })}
+                    {/* Category and Amount */}
+                    <div className="flex items-center justify-between gap-3">
 
-            </div>
-        </div>
+                        <p className="text-sm sm:text-base text-text truncate">
+                            {data.category}
+                        </p>
+
+                        <p className="text-xs sm:text-sm text-muted shrink-0">
+                            ₹{data.spent.toLocaleString("en-IN")}
+                            {" / "}
+                            ₹{data.amount.toLocaleString("en-IN")}
+                        </p>
+
+                    </div>
+
+
+                    {/* Progress Bar */}
+                    <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-text/10">
+
+                        <div
+                            className="h-full rounded-full bg-primary transition-all duration-500"
+                            style={{
+                                width: `${Math.min(percentage, 100)}%`,
+                            }}
+                        />
+
+                    </div>
+
+                </div>
+
+            );
+        })}
+
+    </div>
+
+</div>
     );
 }
 
