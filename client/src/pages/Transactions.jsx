@@ -257,8 +257,7 @@ function Transactions() {
                                                     className="relative mb-8"
                                                 >
 
-                                                    <div className="absolute -left-8.25 top-2 h-4 w-4 rounded-full border-4 border-background bg-primary">
-                                                    </div>
+                                                    <div className="absolute -left-6.75 top-4 h-3.5 w-3.5 rounded-full border-[3px] border-background bg-primary sm:-left-8.25 sm:top-5 sm:h-4 sm:w-4" />
 
                                                     <div className="w-full max-w-md rounded-2xl border border-border bg-background p-4 sm:p-5">
 

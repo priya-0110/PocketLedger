@@ -210,313 +210,362 @@ const expense = transactions.filter(transaction=> transaction.type==="expense")
 
 
     return (
+    <div className="mx-auto w-full min-w-0 max-w-6xl pb-6">
 
+        {/* Page Heading */}
         <div>
+            <h1 className="text-2xl font-semibold text-text sm:text-3xl lg:text-4xl">
+                Account
+            </h1>
 
-            {/* Page Heading */}
+            <p className="mt-1 text-sm text-muted sm:text-base">
+                Manage your profile and account settings
+            </p>
+        </div>
 
-            <div>
+        {/* Profile Section */}
+        <div className="mt-6 flex flex-col gap-5 rounded-2xl border border-border bg-background p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
 
-                <h1 className="text-4xl font-semibold text-text">
-                    Account
-                </h1>
+            <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary-hover text-3xl font-semibold text-primary sm:h-20 sm:w-20 sm:text-5xl">
+                    {userData.name.charAt(0).toUpperCase()}
+                </div>
 
-                <p className="mt-1 text-muted">
-                    Manage your profile and account settings
-                </p>
+                <div className="min-w-0">
+                    <h2 className="break-word text-lg font-semibold text-text sm:text-2xl">
+                        {userData.name}
+                    </h2>
 
+                    <p className="break-all text-sm text-muted sm:text-base">
+                        {userData.email}
+                    </p>
+                </div>
             </div>
 
+            <button
+                onClick={() => {
+                    setIsEditing(true);
+                    setFormData(userData);
+                }}
+                className="w-full shrink-0 rounded-lg bg-accent px-4 py-2.5 text-primary transition-opacity hover:opacity-90 sm:w-auto"
+            >
+                Edit Profile
+            </button>
+        </div>
 
-            {/* Profile Section */}
+        {/* Account Overview */}
+        <div className="mt-5 mb-6 rounded-2xl border border-border bg-background p-4 sm:p-6">
 
-            <div className="mt-6 flex items-center justify-between rounded-2xl bg-background p-6">
+            <h2 className="text-lg font-semibold text-text sm:text-xl">
+                Account Overview
+            </h2>
 
-                <div className="flex items-center gap-5">
+            <div className="mt-5 space-y-4">
 
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary-hover text-6xl font-semibold text-primary">
+                <div className="flex items-center justify-between gap-4">
+                    <span className="text-sm text-muted sm:text-base">
+                        Transactions
+                    </span>
 
-                        {userData.name.charAt(0).toUpperCase()}
+                    <span className="font-semibold text-text">
+                        {transactions.length}
+                    </span>
+                </div>
 
-                    </div>
+                <div className="flex items-center justify-between gap-4">
+                    <span className="text-sm text-muted sm:text-base">
+                        Total Income
+                    </span>
 
+                    <span className="text-right font-semibold text-text">
+                        ₹{Number(income).toLocaleString("en-IN")}
+                    </span>
+                </div>
 
-                    <div>
+                <div className="flex items-center justify-between gap-4">
+                    <span className="text-sm text-muted sm:text-base">
+                        Total Expenses
+                    </span>
 
-                        <h2 className="text-2xl font-semibold text-text">
-                            {userData.name}
-                        </h2>
+                    <span className="text-right font-semibold text-text">
+                        ₹{Number(expense).toLocaleString("en-IN")}
+                    </span>
+                </div>
 
-                        <p className="text-muted">
-                            {userData.email}
+            </div>
+        </div>
+
+        {/* Security */}
+        <div className="rounded-2xl border border-border bg-background p-4 sm:p-6">
+
+            <h2 className="text-lg font-semibold text-text sm:text-xl">
+                Security
+            </h2>
+
+            <div className="mt-5 space-y-5">
+
+                {/* Password */}
+                <div className="flex items-center justify-between gap-4">
+                    <div className="min-w-0">
+                        <p className="font-medium text-text">
+                            Password
                         </p>
 
+                        <p className="text-sm text-muted">
+                            Last changed recently
+                        </p>
                     </div>
 
+                    <button
+                        className="shrink-0 rounded-lg px-2 py-2 text-accent hover:bg-primary/10"
+                        onClick={() => setChangePassword(true)}
+                    >
+                        Change
+                    </button>
                 </div>
 
+                {/* Two Factor Authentication */}
+                <div className="flex items-center justify-between gap-4">
+                    <div className="min-w-0">
+                        <p className="font-medium text-text">
+                            Two-factor authentication
+                        </p>
 
-                <button
-                    onClick={() => {
-                        setIsEditing(true);
-                        setFormData(userData);
-                    }}
-                    className="rounded-lg bg-accent px-4 py-2 text-primary"
-                >
-                    Edit Profile
-                </button>
-
-            </div>
-
-            <div className="mt-5 rounded-2xl bg-background p-6 mb-6">
-
-                <h2 className="text-xl font-semibold text-text">
-                    Account Overview
-                </h2>
-
-                <div className="mt-5 space-y-4">
-
-                    <div className="flex justify-between">
-
-                        <span className="text-muted">
-                            Transactions
-                        </span>
-
-                        <span className="font-semibold text-text">
-                            {transactions.length}
-                        </span>
-
+                        <p className="text-sm text-muted">
+                            Add an extra layer of security
+                        </p>
                     </div>
 
-
-                    <div className="flex justify-between">
-
-                        <span className="text-muted">
-                            Total Income
-                        </span>
-
-                        <span className="font-semibold text-text">
-                            {income}
-                        </span>
-
-                    </div>
-
-
-                    <div className="flex justify-between">
-
-                        <span className="text-muted">
-                            Total Expenses
-                        </span>
-
-                        <span className="font-semibold text-text">
-                            {expense}
-                        </span>
-
-                    </div>
-
+                    <span className="shrink-0 rounded-full bg-muted/10 px-3 py-1 text-sm text-muted">
+                        Off
+                    </span>
                 </div>
 
             </div>
+        </div>
 
+        {/* Edit Profile Modal */}
+        {isEditing && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-3 sm:p-6">
 
-            {/* Security */}
+                <div className="my-auto max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-background p-4 shadow-xl sm:p-6">
 
-            <div className="rounded-2xl bg-background p-6">
-
-                <h2 className="text-xl font-semibold text-text">
-                    Security
-                </h2>
-
-
-                <div className="mt-5 space-y-5">
-
-                    {/* Password */}
-
-                    <div className="flex items-center justify-between">
-
-                        <div>
-
-                            <p className="font-medium text-text">
-                                Password
-                            </p>
-
-                            <p className="text-sm text-muted">
-                                Last changed recently
-                            </p>
-
-                        </div>
-
+                    <div className="flex items-center justify-between gap-3">
+                        <h2 className="text-xl font-semibold text-text sm:text-2xl">
+                            Edit Profile
+                        </h2>
 
                         <button
-                            className="text-accent"
-                            onClick={() =>
-                                setChangePassword(true)
-                            }
+                            onClick={() => setIsEditing(false)}
+                            className="shrink-0 rounded-lg p-1 text-muted hover:bg-primary/10 hover:text-text"
                         >
-                            Change
+                            <X />
                         </button>
-
                     </div>
 
+                    <div className="mt-6 space-y-5">
 
-                    {/* Two Factor Authentication */}
-
-                    <div className="flex items-center justify-between">
-
+                        {/* Name */}
                         <div>
+                            <label className="mb-2 block text-sm text-text sm:text-base">
+                                Name
+                            </label>
 
-                            <p className="font-medium text-text">
-                                Two-factor authentication
-                            </p>
-
-                            <p className="text-sm text-muted">
-                                Add an extra layer of security
-                            </p>
-
+                            <input
+                                type="text"
+                                value={formData.name}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        name: e.target.value
+                                    })
+                                }
+                                className="w-full rounded-lg border border-border bg-background p-3 text-text outline-none focus:border-accent"
+                            />
                         </div>
 
+                        {/* Email */}
+                        <div>
+                            <label className="mb-2 block text-sm text-text sm:text-base">
+                                Email
+                            </label>
 
-                        <span className="text-sm text-muted">
-                            Off
-                        </span>
+                            <input
+                                type="email"
+                                value={formData.email}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        email: e.target.value
+                                    })
+                                }
+                                className="w-full rounded-lg border border-border bg-background p-3 text-text outline-none focus:border-accent"
+                            />
+                        </div>
 
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            {/* ================= EDIT PROFILE MODAL ================= */}
-
-            {isEditing && (
-
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-
-                    <div className="w-full max-w-md rounded-2xl bg-background p-6 shadow-xl">
-
-
-                        <div className="flex items-center justify-between">
-
-                            <h2 className="text-2xl font-semibold text-text">
-                                Edit Profile
-                            </h2>
-
+                        {/* Buttons */}
+                        <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
 
                             <button
-                                onClick={() =>
-                                    setIsEditing(false)
-                                }
-                                className="text-2xl text-muted hover:text-text"
+                                onClick={() => setIsEditing(false)}
+                                className="w-full rounded-lg border border-border px-4 py-2.5 text-text sm:w-auto"
                             >
-                                <X />
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={handleUpdateProfile}
+                                className="w-full rounded-lg bg-accent px-4 py-2.5 text-primary sm:w-auto"
+                            >
+                                Save Changes
                             </button>
 
                         </div>
+                    </div>
+                </div>
+            </div>
+        )}
 
+        {/* Change Password Modal */}
+        {isChangePassword && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-3 sm:p-6">
 
-                        <div className="mt-6 space-y-5">
+                <div className="my-auto max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-background p-4 shadow-xl sm:p-6">
 
+                    {/* Header */}
+                    <div className="flex items-center justify-between gap-3">
+                        <h2 className="text-xl font-semibold text-text sm:text-2xl">
+                            Change Password
+                        </h2>
 
-                            {/* Name */}
+                        <button
+                            onClick={() => {
+                                setChangePassword(false);
 
-                            <div>
-
-                                <label className="mb-2 block text-text">
-                                    Name
-                                </label>
-
-                                <input
-                                    type="text"
-                                    value={formData.name}
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            name: e.target.value
-                                        })
-                                    }
-                                    className="w-full rounded-lg border border-border bg-background p-3 text-text outline-none focus:border-accent"
-                                />
-
-                            </div>
-
-
-                            {/* Email */}
-
-                            <div>
-
-                                <label className="mb-2 block text-text">
-                                    Email
-                                </label>
-
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            email: e.target.value
-                                        })
-                                    }
-                                    className="w-full rounded-lg border border-border bg-background p-3 text-text outline-none focus:border-accent"
-                                />
-
-                            </div>
-
-
-                            {/* Buttons */}
-
-                            <div className="flex justify-end gap-3 pt-2">
-
-                                <button
-                                    onClick={() =>
-                                        setIsEditing(false)
-                                    }
-                                    className="rounded-lg border border-border px-4 py-2 text-text"
-                                >
-                                    Cancel
-                                </button>
-
-
-                                <button
-                                    onClick={handleUpdateProfile}
-                                    className="rounded-lg bg-accent px-4 py-2 text-primary"
-                                >
-                                    Save Changes
-                                </button>
-
-                            </div>
-
-                        </div>
-
+                                setPasswordData({
+                                    currentPassword: "",
+                                    newPassword: "",
+                                    confirmPassword: ""
+                                });
+                            }}
+                            className="shrink-0 rounded-lg p-1 text-muted hover:bg-primary/10 hover:text-text"
+                        >
+                            <X />
+                        </button>
                     </div>
 
-                </div>
+                    <div className="mt-6 space-y-5">
 
-            )}
+                        {/* Current Password */}
+                        <div>
+                            <label className="mb-2 block text-sm text-text sm:text-base">
+                                Current Password
+                            </label>
 
+                            <div className="relative">
+                                <input
+                                    type={showCurrentPassword ? "text" : "password"}
+                                    value={passwordData.currentPassword}
+                                    placeholder="Enter your password"
+                                    onChange={(e) =>
+                                        setPasswordData({
+                                            ...passwordData,
+                                            currentPassword: e.target.value
+                                        })
+                                    }
+                                    className="w-full rounded-lg border border-primary bg-background p-3 pr-12 text-text outline-none focus:border-accent"
+                                />
 
-            {/* ================= CHANGE PASSWORD MODAL ================= */}
+                                <button
+                                    type="button"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
+                                    onClick={() =>
+                                        setShowCurrentPassword(!showCurrentPassword)
+                                    }
+                                >
+                                    {showCurrentPassword
+                                        ? <EyeOff size={20} />
+                                        : <Eye size={20} />
+                                    }
+                                </button>
+                            </div>
+                        </div>
 
-            {isChangePassword && (
+                        {/* New Password */}
+                        <div>
+                            <label className="mb-2 block text-sm text-text sm:text-base">
+                                New Password
+                            </label>
 
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                            <div className="relative">
+                                <input
+                                    type={showNewPassword ? "text" : "password"}
+                                    value={passwordData.newPassword}
+                                    placeholder="Enter new password"
+                                    onChange={(e) =>
+                                        setPasswordData({
+                                            ...passwordData,
+                                            newPassword: e.target.value
+                                        })
+                                    }
+                                    className="w-full rounded-lg border border-primary bg-background p-3 pr-12 text-text outline-none focus:border-accent"
+                                />
 
-                    <div className="w-full max-w-md rounded-2xl bg-background p-6 shadow-xl">
+                                <button
+                                    type="button"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
+                                    onClick={() =>
+                                        setShowNewPassword(!showNewPassword)
+                                    }
+                                >
+                                    {showNewPassword
+                                        ? <EyeOff size={20} />
+                                        : <Eye size={20} />
+                                    }
+                                </button>
+                            </div>
+                        </div>
 
+                        {/* Confirm Password */}
+                        <div>
+                            <label className="mb-2 block text-sm text-text sm:text-base">
+                                Confirm Password
+                            </label>
 
-                        {/* Header */}
+                            <div className="relative">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    value={passwordData.confirmPassword}
+                                    placeholder="Confirm new password"
+                                    onChange={(e) =>
+                                        setPasswordData({
+                                            ...passwordData,
+                                            confirmPassword: e.target.value
+                                        })
+                                    }
+                                    className="w-full rounded-lg border border-primary bg-background p-3 pr-12 text-text outline-none focus:border-accent"
+                                />
 
-                        <div className="flex items-center justify-between">
+                                <button
+                                    type="button"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
+                                    onClick={() =>
+                                        setShowConfirmPassword(!showConfirmPassword)
+                                    }
+                                >
+                                    {showConfirmPassword
+                                        ? <EyeOff size={20} />
+                                        : <Eye size={20} />
+                                    }
+                                </button>
+                            </div>
+                        </div>
 
-                            <h2 className="text-2xl font-semibold text-text">
-                                Change Password
-                            </h2>
-
+                        {/* Buttons */}
+                        <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
 
                             <button
                                 onClick={() => {
-
                                     setChangePassword(false);
 
                                     setPasswordData({
@@ -524,216 +573,27 @@ const expense = transactions.filter(transaction=> transaction.type==="expense")
                                         newPassword: "",
                                         confirmPassword: ""
                                     });
-
                                 }}
-                                className="text-2xl text-muted hover:text-text"
+                                className="w-full rounded-lg border border-border px-4 py-2.5 text-text sm:w-auto"
                             >
-                                <X />
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={handleChangePassword}
+                                className="w-full rounded-lg bg-accent px-4 py-2.5 text-primary sm:w-auto"
+                            >
+                                Change Password
                             </button>
 
                         </div>
-
-
-                        <div className="mt-6 space-y-5">
-
-
-                            {/* Current Password */}
-
-                            <div>
-
-                                <label className="mb-2 block text-text">
-                                    Current Password
-                                </label>
-
-
-                                <div className="relative">
-
-                                    <input
-                                        type={
-                                            showCurrentPassword
-                                                ? "text"
-                                                : "password"
-                                        }
-                                        value={
-                                            passwordData.currentPassword
-                                        }
-                                        placeholder="Enter your password"
-                                        onChange={(e) =>
-                                            setPasswordData({
-                                                ...passwordData,
-                                                currentPassword:
-                                                    e.target.value
-                                            })
-                                        }
-                                        className="w-full rounded-lg border border-primary bg-background p-3 pr-12 text-text outline-none focus:border-accent"
-                                    />
-
-
-                                    <button
-                                        type="button"
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
-                                        onClick={() =>
-                                            setShowCurrentPassword(
-                                                !showCurrentPassword
-                                            )
-                                        }
-                                    >
-                                        {showCurrentPassword
-                                            ? <EyeOff size={20} />
-                                            : <Eye size={20} />
-                                        }
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* New Password */}
-
-                            <div>
-
-                                <label className="mb-2 block text-text">
-                                    New Password
-                                </label>
-
-
-                                <div className="relative">
-
-                                    <input
-                                        type={
-                                            showNewPassword
-                                                ? "text"
-                                                : "password"
-                                        }
-                                        value={
-                                            passwordData.newPassword
-                                        }
-                                        placeholder="Enter new password"
-                                        onChange={(e) =>
-                                            setPasswordData({
-                                                ...passwordData,
-                                                newPassword:
-                                                    e.target.value
-                                            })
-                                        }
-                                        className="w-full rounded-lg border border-primary bg-background p-3 pr-12 text-text outline-none focus:border-accent"
-                                    />
-
-
-                                    <button
-                                        type="button"
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
-                                        onClick={() =>
-                                            setShowNewPassword(
-                                                !showNewPassword
-                                            )
-                                        }
-                                    >
-                                        {showNewPassword
-                                            ? <EyeOff size={20} />
-                                            : <Eye size={20} />
-                                        }
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* Confirm Password */}
-
-                            <div>
-
-                                <label className="mb-2 block text-text">
-                                    Confirm Password
-                                </label>
-
-
-                                <div className="relative">
-
-                                    <input
-                                        type={
-                                            showConfirmPassword
-                                                ? "text"
-                                                : "password"
-                                        }
-                                        value={
-                                            passwordData.confirmPassword
-                                        }
-                                        placeholder="Confirm new password"
-                                        onChange={(e) =>
-                                            setPasswordData({
-                                                ...passwordData,
-                                                confirmPassword:
-                                                    e.target.value
-                                            })
-                                        }
-                                        className="w-full rounded-lg border border-primary bg-background p-3 pr-12 text-text outline-none focus:border-accent"
-                                    />
-
-
-                                    <button
-                                        type="button"
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-primary"
-                                        onClick={() =>
-                                            setShowConfirmPassword(
-                                                !showConfirmPassword
-                                            )
-                                        }
-                                    >
-                                        {showConfirmPassword
-                                            ? <EyeOff size={20} />
-                                            : <Eye size={20} />
-                                        }
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-                            {/* Buttons */}
-
-                            <div className="flex justify-end gap-3 pt-2">
-
-                                <button
-                                    onClick={() => {
-
-                                        setChangePassword(false);
-
-                                        setPasswordData({
-                                            currentPassword: "",
-                                            newPassword: "",
-                                            confirmPassword: ""
-                                        });
-
-                                    }}
-                                    className="rounded-lg border border-border px-4 py-2 text-text"
-                                >
-                                    Cancel
-                                </button>
-
-
-                                <button
-                                    onClick={handleChangePassword}
-                                    className="rounded-lg bg-accent px-4 py-2 text-primary"
-                                >
-                                    Change Password
-                                </button>
-
-                            </div>
-
-                        </div>
-
                     </div>
-
                 </div>
+            </div>
+        )}
 
-            )}
-
-        </div>
-    );
+    </div>
+);
 }
 
 export default Accounts;

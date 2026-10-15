@@ -16,6 +16,22 @@ const COLORS = [
 ];
 
 function SpendingOverview({ title, spendingData }) {
+     if (!spendingData || spendingData.length === 0) {
+        return (
+            <div className="flex min-h-64 flex-col items-center justify-center rounded-2xl border border-border bg-background p-6 text-center">
+                <PieChart size={40} className="mb-4 text-muted" />
+
+                <h2 className="text-lg font-semibold text-text">
+                    No spending data available
+                </h2>
+
+                <p className="mt-2 max-w-sm text-sm text-muted">
+                    You haven't recorded any transactions for this period yet.
+                    Add a transaction to see your spending breakdown.
+                </p>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-background rounded-2xl border border-border p-4 sm:p-5">

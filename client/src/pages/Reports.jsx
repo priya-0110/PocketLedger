@@ -86,6 +86,7 @@ if (timeFilter === "This Week") {
 
     return true;
 })
+const hasIncomeExpenseData = filteredTransactions.length>0;
 const income = filteredTransactions.filter(transaction => transaction.type === "income")
             .reduce((total,transaction)=>total+Number(transaction.amount),0);
 const expense = filteredTransactions.filter(transaction=> transaction.type==="expense")
@@ -144,16 +145,50 @@ const incomeExpenseData = [
        </div>
        <div className="h-100 w-full mt-5 bg-background p-5 pt-7 rounded-2xl">
         <h1 className="text-2xl mb-4">Income VS Expenses</h1>
-        <ResponsiveContainer width="97%" height="85%">
-            <BarChart data={incomeExpenseData} layout="vertical">
-            <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis type="number"/>
-            <YAxis type="category"
-                dataKey="name"/>
-            <Tooltip/>
-            <Bar dataKey="amount" barSize={50}  fill="#86A6CF"/>
-            </BarChart>
-        </ResponsiveContainer>
+            {hasIncomeExpenseData ? (
+        <div className="h-64 w-full sm:h-80">
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={incomeExpenseData} layout="vertical">
+                    <CartesianGrid strokeDasharray="3 3" />
+
+                    <XAxis type="number" />
+
+                    <YAxis
+                        type="category"
+                        dataKey="name"
+                        width={75}
+                    />
+
+                    <Tooltip
+                        formatter={(value) =>
+                            `₹${Number(value).toLocaleString("en-IN")}`
+                        }
+                    />
+
+                    <Bar
+                        dataKey="amount"
+                        barSize={35}
+                        fill="#86A6CF"
+                        radius={[0, 6, 6, 0]}
+                    />
+                </BarChart>
+            </ResponsiveContainer>
+        </div>
+    ) : (
+        <div className="flex min-h-64 flex-col items-center justify-center px-4 text-center">
+            <HandCoins size={40} className="mb-4 text-muted" />
+
+            <h2 className="text-lg font-semibold text-text">
+                No income or expense data
+            </h2>
+
+            <p className="mt-2 max-w-sm text-sm text-muted">
+                You haven't recorded any transactions for this period.
+                Add an income or expense transaction to see your comparison.
+            </p>
+        </div>
+    )}
+
         
        </div>
         </div>
